@@ -30,7 +30,7 @@ class FedNHClient(FedUHClient):
         self.model.eval()
         self.model.return_embedding = True
         embedding_dim = self.model.prototype.shape[1]
-        prototype = torch.zeros_like(self.model.prototype)
+        prototype = torch.zeros_like(self.model.prototype) # 看上去是参数，实际是原型列表
         with torch.no_grad():
             for i, (x, y) in enumerate(self.trainloader):
                 # forward pass
@@ -143,7 +143,7 @@ class FedNHServer(FedUHServer):
                                                                          exclude=self.exclude_layer_keys
                                                                          )
             avg_prototype = torch.zeros_like(self.server_model_state_dict['prototype'])
-            if self.server_config['FedNH_server_adv_prototype_agg'] == False:
+            if self.server_config['FedNH_server_adv_prototype_agg'] == False: # 此处直接上传原型参数
                 for _, prototype_dict in client_uploads:
                     avg_prototype += prototype_dict['scaled_prototype'] / cumsum_per_class.view(-1, 1)
             else:

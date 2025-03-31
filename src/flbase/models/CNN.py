@@ -63,7 +63,7 @@ class Conv2CifarNH(Model):
         else:
             prototype_norm = torch.norm(self.prototype, p=2, dim=1, keepdim=True).clamp(min=1e-12)
             normalized_prototype = torch.div(self.prototype, prototype_norm)
-        logits = torch.matmul(feature_embedding, normalized_prototype.T)
+        logits = torch.matmul(feature_embedding, normalized_prototype.T)  # 推理时同时考虑原型与特征
         logits = self.scaling * logits
 
         if self.return_embedding:
